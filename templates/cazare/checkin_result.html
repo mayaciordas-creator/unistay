@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %}Rezultat Check-in - UniStay{% endblock %}
+{% block content %}
+<section class="section" style="min-height: 70vh; display: flex; align-items: center;">
+<div class="checkin-container">
+    <div class="uni-card">
+        <div class="uni-card-body p-5">
+            <div class="checkin-success">
+                {% if success %}
+                    <div class="success-icon">
+                        <i class="bi bi-check-circle-fill"></i>
+                    </div>
+                    <h2 class="fw-bold mb-3" style="color: var(--uni-success);">Check-in Reușit!</h2>
+                    <p class="mb-4" style="color: var(--text-secondary);">
+                        Bine ai venit! Check-in-ul a fost realizat cu succes.
+                    </p>
+                    {% if rezervare %}
+                    <div class="uni-card uni-card-static">
+                        <div class="uni-card-body text-start">
+                            <p class="mb-1">
+                                <strong>Student:</strong> 
+                                {{ rezervare.student.get_full_name|default:rezervare.student.username }}
+                            </p>
+                            <p class="mb-1">
+                                <strong>Camera:</strong> {{ rezervare.camera }}
+                            </p>
+                            <p class="mb-1">
+                                <strong>Perioada:</strong> 
+                                {{ rezervare.data_start|date:"d.m.Y" }} - 
+                                {{ rezervare.data_sfarsit|date:"d.m.Y" }}
+                            </p>
+                            <p class="mb-0">
+                                <strong>Cod:</strong> 
+                                <code>{{ rezervare.cod_unic }}</code>
+                            </p>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% else %}
+                    <div class="error-icon">
+                        <i class="bi bi-x-circle-fill"></i>
+                    </div>
+                    <h2 class="fw-bold mb-3" style="color: var(--uni-danger);">Check-in Neprocesat</h2>
+                    <p class="mb-4" style="color: var(--text-secondary);">
+                        {% if mesaj %}
+                            {{ mesaj }}
+                        {% else %}
+                            Codul introdus <code>{{ cod_unic }}</code> nu a fost găsit.
+                            Verifică și încearcă din nou.
+                        {% endif %}
+                    </p>
+                {% endif %}
+                <hr>
+                <a href="{% url 'checkin' %}" class="btn btn-primary">
+                    <i class="bi bi-arrow-left"></i> Încearcă din nou
+                </a>
+                <a href="{% url 'home' %}" class="btn btn-outline-secondary ms-2">
+                    <i class="bi bi-house"></i> Acasă
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+{% endblock %}

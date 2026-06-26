@@ -1,0 +1,947 @@
+/* 
+   UniStay — Design System Dark Mode Uniform
+   Folosește variabilele Nexa din main.css:
+   --background-color, --surface-color, --default-color,
+   --heading-color, --accent-color, --contrast-color
+*/
+
+/* ============================================================
+   Design Tokens Suplimentare
+   ============================================================ */
+:root {
+    --surface-hover: #2a2a30;
+    --surface-alt: rgba(255, 255, 255, 0.03);
+    --border-color: rgba(255, 255, 255, 0.08);
+    --border-hover: rgba(255, 255, 255, 0.15);
+    --text-primary: rgba(255, 255, 255, 0.9);
+    --text-secondary: rgba(255, 255, 255, 0.55);
+    --text-tertiary: rgba(255, 255, 255, 0.35);
+    --uni-success: #06d6a0;
+    --uni-warning: #ffd166;
+    --uni-danger: #ef476f;
+    --uni-info: #118ab2;
+    --gradient-primary: linear-gradient(135deg, #4361ee 0%, #7209b7 100%);
+    --gradient-success: linear-gradient(135deg, #06d6a0 0%, #00b894 100%);
+    --gradient-warning: linear-gradient(135deg, #ffd166 0%, #e17055 100%);
+    --gradient-danger: linear-gradient(135deg, #ef476f 0%, #d63031 100%);
+    --gradient-info: linear-gradient(135deg, #118ab2 0%, #073b4c 100%);
+    --gradient-accent: linear-gradient(135deg, #f72585 0%, #b5179e 100%);
+    --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    --card-hover-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+    --transition: all 0.3s ease;
+}
+
+/* ============================================================
+   Body & General — Override Bootstrap light defaults
+   ============================================================ */
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main { flex: 1; }
+
+/* ============================================================
+   Universal Card (.uni-card)
+   ============================================================ */
+.uni-card {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+    transition: var(--transition);
+}
+
+.uni-card:hover {
+    box-shadow: var(--card-hover-shadow);
+    transform: translateY(-3px);
+    border-color: var(--border-hover);
+}
+
+.uni-card-header {
+    background-color: var(--surface-alt);
+    border-bottom: 1px solid var(--border-color) !important;
+    padding: 1.25rem 1.5rem;
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+.uni-card-body {
+    padding: 1.5rem;
+}
+
+/* Card fara hover lift (tabele, liste) */
+.uni-card-static:hover {
+    transform: none;
+}
+
+/* ============================================================
+   Auth Cards (login/register) — Glassmorphism dark
+   ============================================================ */
+.auth-card {
+    background: rgba(31, 31, 35, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+}
+
+.auth-card .auth-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.auth-card .auth-header i {
+    font-size: 3rem;
+    color: var(--accent-color);
+}
+
+.auth-card .auth-header h3 {
+    color: var(--heading-color);
+    font-weight: 700;
+    margin-top: 0.5rem;
+}
+
+.auth-card .auth-header p {
+    color: var(--text-secondary);
+}
+
+.auth-card .form-label {
+    color: var(--text-secondary) !important;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.auth-card .form-control,
+.auth-card .form-select {
+    background-color: rgba(255, 255, 255, 0.06) !important;
+    border: 1px solid var(--border-color) !important;
+    color: var(--text-primary) !important;
+    border-radius: 10px;
+    padding: 0.7rem 1rem;
+    transition: var(--transition);
+}
+
+.auth-card .form-control:focus,
+.auth-card .form-select:focus {
+    border-color: var(--accent-color) !important;
+    box-shadow: 0 0 0 3px rgba(0, 136, 112, 0.2) !important;
+    background-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.auth-card .form-control::placeholder {
+    color: var(--text-tertiary);
+}
+
+.auth-card .input-group-text {
+    background-color: rgba(255, 255, 255, 0.06) !important;
+    border: 1px solid var(--border-color) !important;
+    color: var(--text-secondary) !important;
+}
+
+.auth-card .text-link {
+    color: var(--text-secondary);
+}
+
+.auth-card .text-link a {
+    color: var(--accent-color);
+    font-weight: 600;
+}
+
+.auth-card .section-divider {
+    color: var(--text-secondary);
+    font-weight: 700;
+}
+
+/* ============================================================
+   Tables (.uni-table)
+   ============================================================ */
+.uni-table {
+    --bs-table-bg: transparent;
+    --bs-table-hover-bg: rgba(255, 255, 255, 0.04);
+    --bs-table-striped-bg: transparent;
+    color: var(--text-primary);
+    margin-bottom: 0;
+}
+
+.uni-table thead th {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    border-bottom: 1px solid var(--border-color) !important;
+    padding: 1rem;
+    border-top: none;
+}
+
+.uni-table tbody td {
+    padding: 0.9rem 1rem;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--border-color) !important;
+    color: var(--text-primary);
+}
+
+.uni-table tbody tr {
+    transition: var(--transition);
+}
+
+.uni-table tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.04) !important;
+}
+
+.uni-table code {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--accent-color);
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+}
+
+/* ============================================================
+   Forms — Dark inputs for ALL forms
+   ============================================================ */
+.uni-form .form-label,
+.uni-card .form-label {
+    color: var(--text-secondary);
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.uni-form .form-control,
+.uni-form .form-select,
+.uni-card .form-control,
+.uni-card .form-select {
+    background-color: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    border-radius: 10px;
+    padding: 0.7rem 1rem;
+    transition: var(--transition);
+}
+
+.uni-form .form-control:focus,
+.uni-form .form-select:focus,
+.uni-card .form-control:focus,
+.uni-card .form-select:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(0, 136, 112, 0.2);
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.uni-form .form-check-label,
+.uni-card .form-check-label {
+    color: var(--text-primary);
+}
+
+.uni-form .form-text {
+    color: var(--text-tertiary);
+}
+
+/* ============================================================
+   Buttons
+   ============================================================ */
+.btn-primary {
+    background: var(--gradient-primary) !important;
+    border: none !important;
+    border-radius: 10px;
+    padding: 0.6rem 1.5rem;
+    font-weight: 600;
+    transition: var(--transition);
+    color: #fff !important;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(67, 97, 238, 0.4);
+}
+
+.btn-success {
+    background: var(--gradient-success) !important;
+    border: none !important;
+    border-radius: 10px;
+    font-weight: 600;
+    color: #fff !important;
+}
+
+.btn-success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(6, 214, 160, 0.4);
+}
+
+.btn-outline-primary {
+    border-radius: 10px;
+    font-weight: 600;
+    border-width: 2px;
+    color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: #fff;
+}
+
+.btn-outline-danger {
+    border-radius: 10px;
+    font-weight: 600;
+    border-width: 2px;
+}
+
+.btn-outline-secondary {
+    border-radius: 10px;
+    font-weight: 600;
+    border-width: 2px;
+    color: var(--text-secondary);
+    border-color: var(--border-color);
+}
+
+.btn-outline-secondary:hover {
+    background-color: var(--surface-hover);
+    border-color: var(--border-hover);
+    color: var(--text-primary);
+}
+
+/* ============================================================
+   Status Badges
+   ============================================================ */
+.uni-badge {
+    padding: 0.35rem 0.8rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-block;
+}
+
+.uni-badge-pending {
+    background: rgba(255, 209, 102, 0.15);
+    color: #ffd166;
+}
+
+.uni-badge-confirmed {
+    background: rgba(6, 214, 160, 0.15);
+    color: #06d6a0;
+}
+
+.uni-badge-checked_in {
+    background: rgba(17, 138, 178, 0.15);
+    color: #56ccf2;
+}
+
+.uni-badge-cancelled {
+    background: rgba(239, 71, 111, 0.15);
+    color: #ef476f;
+}
+
+/* Also support the old status-badge classes */
+.status-badge {
+    padding: 0.35rem 0.8rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-pending {
+    background: rgba(255, 209, 102, 0.15);
+    color: #ffd166;
+}
+
+.status-confirmed {
+    background: rgba(6, 214, 160, 0.15);
+    color: #06d6a0;
+}
+
+.status-checked_in {
+    background: rgba(17, 138, 178, 0.15);
+    color: #56ccf2;
+}
+
+.status-cancelled {
+    background: rgba(239, 71, 111, 0.15);
+    color: #ef476f;
+}
+
+/* ============================================================
+   Stat Cards (Admin Dashboard)
+   ============================================================ */
+.uni-stat {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: var(--transition);
+    border-left: 4px solid var(--accent-color);
+}
+
+.uni-stat:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--card-hover-shadow);
+}
+
+.uni-stat .stat-number {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.uni-stat .stat-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    margin-top: 0.25rem;
+}
+
+.uni-stat.success { border-left-color: var(--uni-success); }
+.uni-stat.success .stat-number {
+    background: var(--gradient-success);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.uni-stat.warning { border-left-color: var(--uni-warning); }
+.uni-stat.warning .stat-number {
+    background: var(--gradient-warning);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.uni-stat.info { border-left-color: var(--uni-info); }
+.uni-stat.info .stat-number {
+    background: var(--gradient-info);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.uni-stat.accent { border-left-color: #f72585; }
+.uni-stat.accent .stat-number {
+    background: var(--gradient-accent);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ============================================================
+   Admin Action Cards
+   ============================================================ */
+.admin-action-card {
+    display: block;
+    text-align: center;
+    padding: 2rem 1.5rem;
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    transition: var(--transition);
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--text-primary);
+}
+
+.admin-action-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--card-hover-shadow);
+    border-color: var(--accent-color);
+    color: var(--text-primary);
+}
+
+.admin-action-card .action-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--accent-color);
+    transition: var(--transition);
+}
+
+.admin-action-card:hover .action-icon {
+    transform: scale(1.15);
+}
+
+.admin-action-card h5 {
+    font-weight: 700;
+    color: var(--heading-color);
+    margin-bottom: 0.5rem;
+}
+
+.admin-action-card p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+/* ============================================================
+   Page Headings (inside pages, not home)
+   ============================================================ */
+.page-heading {
+    color: var(--heading-color);
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+}
+
+.page-heading i {
+    color: var(--accent-color);
+    margin-right: 0.5rem;
+}
+
+.page-subtitle {
+    color: var(--text-secondary);
+    font-size: 1rem;
+}
+
+.page-back-link {
+    color: var(--accent-color);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.page-back-link:hover {
+    color: var(--heading-color);
+}
+
+/* ============================================================
+   Info detail list (room detail sidebar)
+   ============================================================ */
+.info-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.info-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+.info-list li:last-child {
+    border-bottom: none;
+}
+
+.info-list .info-label {
+    color: var(--text-secondary);
+}
+
+.info-list .info-label i {
+    margin-right: 0.5rem;
+}
+
+.info-list .info-value {
+    font-weight: 700;
+    color: var(--heading-color);
+}
+
+/* ============================================================
+   Detail boxes (room detail stats)
+   ============================================================ */
+.detail-box {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border-radius: 12px;
+    background-color: var(--surface-alt);
+    border: 1px solid var(--border-color);
+    gap: 1rem;
+}
+
+.detail-box i {
+    font-size: 2rem;
+    color: var(--accent-color);
+}
+
+.detail-box .detail-label {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.detail-box .detail-value {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--heading-color);
+}
+
+/* ============================================================
+   Check-in Container
+   ============================================================ */
+.checkin-container {
+    max-width: 600px;
+    margin: 3rem auto;
+    padding: 0 1rem;
+}
+
+.checkin-success {
+    text-align: center;
+    padding: 2rem;
+}
+
+.checkin-success .success-icon {
+    font-size: 5rem;
+    color: var(--uni-success);
+    margin-bottom: 1.5rem;
+}
+
+.checkin-success .error-icon {
+    font-size: 5rem;
+    color: var(--uni-danger);
+    margin-bottom: 1.5rem;
+}
+
+/* ============================================================
+   QR Code container
+   ============================================================ */
+.qr-container {
+    text-align: center;
+    padding: 2rem;
+}
+
+.qr-container img {
+    max-width: 200px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    background: #fff;
+    padding: 8px;
+}
+
+/* ============================================================
+   Price tag
+   ============================================================ */
+.price-display {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--heading-color);
+}
+
+.price-display .price-unit {
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--text-secondary);
+}
+
+/* ============================================================
+   Empty states
+   ============================================================ */
+.uni-empty {
+    text-align: center;
+    padding: 3rem 1rem;
+}
+
+.uni-empty i {
+    font-size: 4rem;
+    color: var(--text-tertiary);
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.uni-empty h4, .uni-empty h5 {
+    color: var(--heading-color);
+    font-weight: 600;
+}
+
+.uni-empty p {
+    color: var(--text-secondary);
+}
+
+/* ============================================================
+   Alerts — Dark mode variants
+   ============================================================ */
+.alert-info {
+    background-color: rgba(17, 138, 178, 0.12) !important;
+    border: 1px solid rgba(17, 138, 178, 0.25) !important;
+    color: #56ccf2 !important;
+}
+
+.alert-danger {
+    background-color: rgba(239, 71, 111, 0.12) !important;
+    border: 1px solid rgba(239, 71, 111, 0.25) !important;
+    color: #ff8fa3 !important;
+}
+
+.alert-warning {
+    background-color: rgba(255, 209, 102, 0.12) !important;
+    border: 1px solid rgba(255, 209, 102, 0.25) !important;
+    color: #ffd166 !important;
+}
+
+.alert-success {
+    background-color: rgba(6, 214, 160, 0.12) !important;
+    border: 1px solid rgba(6, 214, 160, 0.25) !important;
+    color: #06d6a0 !important;
+}
+
+.alert .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* ============================================================
+   Card overrides — suppress Bootstrap white defaults
+   ============================================================ */
+.card {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    color: var(--text-primary);
+    box-shadow: var(--card-shadow);
+    transition: var(--transition);
+}
+
+.card-header {
+    background-color: var(--surface-alt) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    color: var(--text-primary);
+}
+
+.card-body {
+    color: var(--text-primary);
+}
+
+.card:hover {
+    box-shadow: var(--card-hover-shadow);
+}
+
+/* ============================================================
+   Bootstrap overrides for dark mode
+   ============================================================ */
+.text-muted {
+    color: var(--text-secondary) !important;
+}
+
+.text-dark {
+    color: var(--text-primary) !important;
+}
+
+.bg-light {
+    background-color: var(--surface-alt) !important;
+}
+
+.bg-white {
+    background-color: var(--surface-color) !important;
+}
+
+.border-bottom {
+    border-color: var(--border-color) !important;
+}
+
+.border-top {
+    border-color: var(--border-color) !important;
+}
+
+.border-start {
+    border-color: var(--accent-color) !important;
+}
+
+hr {
+    border-color: var(--border-color);
+    opacity: 1;
+}
+
+code {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--accent-color);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+}
+
+/* Table overrides */
+.table-light {
+    --bs-table-bg: rgba(255, 255, 255, 0.05) !important;
+    --bs-table-color: var(--text-secondary) !important;
+}
+
+.table-hover > tbody > tr:hover {
+    --bs-table-hover-bg: rgba(255, 255, 255, 0.04);
+    color: var(--text-primary);
+}
+
+.table {
+    color: var(--text-primary);
+    --bs-table-bg: transparent;
+}
+
+/* Form switch on dark */
+.form-check-input {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: var(--border-color);
+}
+
+.form-check-input:checked {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+/* Form select dark */
+.form-select {
+    color: var(--text-primary);
+    background-color: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border-color);
+}
+
+.form-control {
+    color: var(--text-primary);
+    background-color: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(0, 136, 112, 0.2);
+    background-color: rgba(255, 255, 255, 0.08);
+    color: var(--text-primary);
+}
+
+.form-label {
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.form-text {
+    color: var(--text-tertiary);
+}
+
+/* ============================================================
+   Section title fix for inner pages
+   ============================================================ */
+.section-title {
+    color: var(--heading-color) !important;
+}
+
+.section-subtitle {
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+}
+
+/* ============================================================
+   Footer dark
+   ============================================================ */
+footer {
+    color: var(--text-secondary);
+}
+
+/* ============================================================
+   Room cards in list
+   ============================================================ */
+.portfolio-card {
+    background-color: var(--surface-color) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 16px;
+    transition: var(--transition);
+}
+
+.portfolio-card:hover {
+    border-color: var(--accent-color) !important;
+    transform: translateY(-5px);
+}
+
+.portfolio-card h4 {
+    color: var(--heading-color) !important;
+}
+
+.portfolio-card li {
+    color: var(--text-primary) !important;
+}
+
+.portfolio-card strong {
+    color: var(--text-primary) !important;
+}
+
+.portfolio-card .text-white-50,
+.portfolio-card .text-muted {
+    color: var(--text-secondary) !important;
+}
+
+/* ============================================================
+   Reservation active card border fix
+   ============================================================ */
+.border-4.border-primary {
+    border-color: var(--accent-color) !important;
+}
+
+/* ============================================================
+   Badge overrides for dark
+   ============================================================ */
+.badge.bg-success-subtle {
+    background-color: rgba(6, 214, 160, 0.15) !important;
+}
+
+.badge.bg-danger-subtle {
+    background-color: rgba(239, 71, 111, 0.15) !important;
+}
+
+.badge.bg-success {
+    background: var(--gradient-success) !important;
+}
+
+.badge.bg-warning {
+    background: rgba(255, 209, 102, 0.9) !important;
+    color: #1a1a2e !important;
+}
+
+.badge.bg-info {
+    background: rgba(17, 138, 178, 0.9) !important;
+}
+
+.badge.bg-danger {
+    background: rgba(239, 71, 111, 0.9) !important;
+}
+
+/* ============================================================
+   Animations
+   ============================================================ */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+@keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(0, 136, 112, 0.4); }
+    50% { box-shadow: 0 0 20px 5px rgba(0, 136, 112, 0.15); }
+}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+@media (max-width: 768px) {
+    .uni-stat .stat-number {
+        font-size: 2rem;
+    }
+    
+    .checkin-container {
+        margin: 1.5rem auto;
+    }
+
+    .auth-card .card-body,
+    .auth-card .uni-card-body {
+        padding: 1.5rem;
+    }
+}

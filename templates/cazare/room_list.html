@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% block title %}Camere Disponibile - UniStay{% endblock %}
+{% block content %}
+<section id="rooms" class="portfolio section" style="padding-top: 40px;">
+  <div class="container section-title" data-aos="fade-up">
+    <span class="description-title">Camere</span>
+    <h2>Camere Disponibile</h2>
+  </div>
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+    <div class="uni-card uni-card-static mb-5">
+      <div class="uni-card-body p-4">
+        <form method="get" class="row g-3 align-items-end uni-form">
+          <div class="col-md-3">
+            <label class="form-label fw-bold small text-uppercase">
+              <i class="bi bi-building"></i> Clădire
+            </label>
+            <select name="cladire" class="form-select py-2">
+              <option value="">Toate clădirile</option>
+              {% for cladire in cladiri %}
+              <option value="{{ cladire.id }}" {% if cladire_selectata == cladire.id|stringformat:"d" %}selected{% endif %}>
+                {{ cladire.nume }}
+              </option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label fw-bold small text-uppercase">
+              <i class="bi bi-layers"></i> Etaj
+            </label>
+            <input type="number" name="etaj" class="form-control py-2" value="{{ etaj_selectat|default:'' }}" placeholder="Ex: 2" min="0">
+          </div>
+          <div class="col-md-2">
+            <label class="form-label fw-bold small text-uppercase">
+              <i class="bi bi-gender-ambiguous"></i> Gen
+            </label>
+            <select name="gen_camera" class="form-select py-2">
+              <option value="">Toate</option>
+              <option value="M" {% if gen_camera_selectat == 'M' %}selected{% endif %}>Masculin</option>
+              <option value="F" {% if gen_camera_selectat == 'F' %}selected{% endif %}>Feminin</option>
+              <option value="mixt" {% if gen_camera_selectat == 'mixt' %}selected{% endif %}>Mixt</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <div class="form-check form-switch mt-4 pt-2">
+              <input class="form-check-input" type="checkbox" role="switch" name="disponibile" value="1" id="checkDisponibile" {% if doar_disponibile %}checked{% endif %}>
+              <label class="form-check-label fw-medium ms-2" for="checkDisponibile">Doar disponibile</label>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <button type="submit" class="btn btn-primary w-100 py-2">
+              <i class="bi bi-funnel"></i> Filtrează
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="isotope-layout" data-default-filter="*" data-layout="fitRows" data-sort="original-order">
+      {% if camere %}
+      <div class="row gy-4 portfolio-grid isotope-container" data-aos="fade-up" data-aos-delay="200">
+        {% for camera in camere %}
+        <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-app">
+          <div class="uni-card" style="transition: transform 0.3s ease;">
+            <div class="uni-card-header py-3 px-4 d-flex justify-content-between align-items-center">
+              <h4 class="mb-0 fw-bold" style="color: var(--heading-color);">Camera {{ camera.numar }}</h4>
+              {% if camera.este_disponibila %}
+                <span class="badge bg-success-subtle text-success rounded-pill px-3 py-2"><i class="bi bi-check-circle me-1"></i> Liberă</span>
+              {% else %}
+                <span class="badge bg-danger-subtle text-danger rounded-pill px-3 py-2"><i class="bi bi-x-circle me-1"></i> Ocupată</span>
+              {% endif %}
+            </div>
+            <div class="uni-card-body p-4">
+              <ul class="list-unstyled mb-4">
+                {% if camera.cladire %}
+                <li class="mb-2"><i class="bi bi-building me-2" style="color: var(--accent-color);"></i> <strong>Cămin:</strong> {{ camera.cladire.nume }} (Etaj {{ camera.etaj }})</li>
+                {% endif %}
+                <li class="mb-2"><i class="bi bi-people me-2" style="color: var(--accent-color);"></i> <strong>Locuri:</strong> {{ camera.locuri_disponibile }} libere / {{ camera.numar_locuri }} total</li>
+                <li class="mb-2"><i class="bi bi-gender-ambiguous me-2" style="color: var(--accent-color);"></i> <strong>Gen:</strong> {{ camera.get_gen_camera_display }}</li>
+                <li class="mb-2"><i class="bi bi-droplet me-2" style="color: var(--accent-color);"></i> <strong>Baie:</strong> {{ camera.get_tip_baie_display }}</li>
+              </ul>
+              <div class="d-flex justify-content-between align-items-center mt-auto pt-3" style="border-top: 1px solid var(--border-color);">
+                <div class="fs-5 fw-bold" style="color: var(--heading-color);">{{ camera.pret_lunar }} <span class="fs-6 fw-normal" style="color: var(--text-secondary);">RON/lună</span></div>
+                <a href="{% url 'room_detail' camera.pk %}" class="btn btn-outline-primary btn-sm rounded-pill px-3">
+                  <i class="bi bi-arrow-right"></i> Rezervă
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="uni-empty mt-4">
+        <i class="bi bi-search"></i>
+        <h4 class="fw-bold">Nu s-au găsit camere</h4>
+        <p>Încearcă să modifici sau să resetezi filtrele de căutare.</p>
+        <a href="{% url 'room_list' %}" class="btn btn-outline-primary mt-2 rounded-pill px-4">
+          <i class="bi bi-arrow-counterclockwise"></i> Resetează filtrele
+        </a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

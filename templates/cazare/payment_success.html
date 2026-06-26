@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block title %}Plată Reușită - UniStay{% endblock %}
+{% block content %}
+<section class="section">
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="uni-card text-center">
+                <div class="uni-card-body p-5">
+                    <div class="mb-4">
+                        <i class="bi bi-check-circle-fill" style="font-size: 5rem; color: var(--uni-success);"></i>
+                    </div>
+                    <h2 class="fw-bold mb-3" style="color: var(--uni-success);">Plata a fost reușită!</h2>
+                    <p class="mb-4" style="color: var(--text-secondary);">
+                        Rezervarea ta a fost confirmată. Mai jos găsești codul QR 
+                        pentru check-in la cămin.
+                    </p>
+                    <div class="uni-card uni-card-static mb-4">
+                        <div class="uni-card-body">
+                            <div class="row text-start">
+                                <div class="col-md-6">
+                                    <p class="mb-1">
+                                        <i class="bi bi-hash" style="color: var(--accent-color);"></i>
+                                        <strong>Cod rezervare:</strong> 
+                                        <code>{{ rezervare.cod_unic }}</code>
+                                    </p>
+                                    <p class="mb-1">
+                                        <i class="bi bi-door-closed" style="color: var(--accent-color);"></i>
+                                        <strong>Camera:</strong> {{ rezervare.camera }}
+                                    </p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="mb-1">
+                                        <i class="bi bi-calendar" style="color: var(--accent-color);"></i>
+                                        <strong>Perioada:</strong> 
+                                        {{ rezervare.data_start|date:"d.m.Y" }} - 
+                                        {{ rezervare.data_sfarsit|date:"d.m.Y" }}
+                                    </p>
+                                    <p class="mb-1">
+                                        <i class="bi bi-check2-circle" style="color: var(--uni-success);"></i>
+                                        <strong>Status:</strong> 
+                                        <span class="uni-badge uni-badge-confirmed">Confirmată</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% if rezervare.qr_code %}
+                    <div class="qr-container">
+                        <h5 class="fw-bold mb-3" style="color: var(--heading-color);">
+                            <i class="bi bi-qr-code"></i> Codul tău QR
+                        </h5>
+                        <img src="{{ rezervare.qr_code.url }}" alt="Cod QR Rezervare" 
+                             class="img-fluid mb-3">
+                        <p class="small" style="color: var(--text-secondary);">
+                            Prezintă acest cod QR la check-in sau folosește codul: 
+                            <code>{{ rezervare.cod_unic }}</code>
+                        </p>
+                    </div>
+                    {% endif %}
+                    <hr>
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <a href="{% url 'student_dashboard' %}" class="btn btn-primary">
+                            <i class="bi bi-speedometer2"></i> Mergi la Dashboard
+                        </a>
+                        <a href="{% url 'checkin' %}" class="btn btn-outline-primary">
+                            <i class="bi bi-qr-code-scan"></i> Check-in Acum
+                        </a>
+                        <a href="{% url 'repeat_payment' rezervare.id %}" class="btn btn-outline-success">
+                            <i class="bi bi-arrow-repeat"></i> Repetă Plata
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+{% endblock %}

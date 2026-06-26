@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block title %}{{ titlu }} - UniStay{% endblock %}
+{% block content %}
+<section id="room-form" class="section">
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <a href="{% url 'manage_rooms' %}" class="btn btn-outline-primary mb-4">
+                <i class="bi bi-arrow-left"></i> Înapoi la lista camerelor
+            </a>
+            <div class="uni-card">
+                <div class="uni-card-header py-4">
+                    <h4 class="mb-0 fw-bold">
+                        <i class="bi bi-door-open me-2"></i> {{ titlu }}
+                    </h4>
+                </div>
+                <div class="uni-card-body p-4">
+                    <form method="post" class="uni-form">
+                        {% csrf_token %}
+                        {% if form.errors %}
+                        <div class="alert alert-danger">
+                            <i class="bi bi-exclamation-circle me-2"></i>
+                            <strong>Corectează erorile:</strong>
+                            <ul class="mb-0 mt-2">
+                                {% for field, errors in form.errors.items %}
+                                    {% for error in errors %}
+                                    <li>{{ error }}</li>
+                                    {% endfor %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="id_numar" class="form-label fw-bold">Număr cameră *</label>
+                                {{ form.numar }}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="id_cladire" class="form-label fw-bold">Clădire</label>
+                                {{ form.cladire }}
+                            </div>
+                            <div class="col-md-4">
+                                <label for="id_etaj" class="form-label fw-bold">Etaj</label>
+                                {{ form.etaj }}
+                            </div>
+                            <div class="col-md-4">
+                                <label for="id_numar_locuri" class="form-label fw-bold">Nr. locuri *</label>
+                                {{ form.numar_locuri }}
+                            </div>
+                            <div class="col-md-4">
+                                <label for="id_locuri_disponibile" class="form-label fw-bold">Loc. disponibile *</label>
+                                {{ form.locuri_disponibile }}
+                            </div>
+                            <div class="col-12">
+                                <label for="id_pret_lunar" class="form-label fw-bold">Preț lunar (RON) *</label>
+                                {{ form.pret_lunar }}
+                            </div>
+                            <div class="col-12">
+                                <label for="id_descriere" class="form-label fw-bold">Descriere</label>
+                                {{ form.descriere }}
+                            </div>
+                        </div>
+                        <hr class="my-4">
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'manage_rooms' %}" class="btn btn-outline-secondary">
+                                <i class="bi bi-x"></i> Anulează
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle"></i> Salvează
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block title %}Check-in Digital - UniStay{% endblock %}
+{% block content %}
+<section class="section" style="min-height: 70vh; display: flex; align-items: center;">
+<div class="checkin-container">
+    <div class="uni-card">
+        <div class="uni-card-header text-center">
+            <h3 class="mb-0 fw-bold">
+                <i class="bi bi-qr-code-scan me-2"></i> Check-in Digital
+            </h3>
+        </div>
+        <div class="uni-card-body p-4">
+            <p class="text-center mb-4" style="color: var(--text-secondary);">
+                Introdu codul unic al rezervării sau scanează / atașează codul QR primit.
+            </p>
+            <div id="qr-reader" style="width: 100%; margin-bottom: 25px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color);"></div>
+            <form method="post" action="{% url 'checkin_process' %}" class="uni-form" id="checkin-form">
+                {% csrf_token %}
+                <div class="mb-4">
+                    <label for="id_cod_unic" class="form-label fw-bold">
+                        <i class="bi bi-key"></i> Cod Unic Rezervare
+                    </label>
+                    {{ form.cod_unic }}
+                    <div class="form-text">
+                        Exemplu: A1B2C3D4E5F6
+                    </div>
+                </div>
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="bi bi-check2-square"></i> Realizează Check-in
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</section>
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        function onScanSuccess(decodedText, decodedResult) {
+            // Oprește scanarea după succes
+            html5QrcodeScanner.clear();
+            try {
+                // Încercăm să parsăm JSON-ul din QR (codul nostru generează un JSON)
+                let data = JSON.parse(decodedText);
+                if (data.cod_unic) {
+                    document.getElementById('id_cod_unic').value = data.cod_unic;
+                    // Opțional: putem da submit automat
+                    // document.getElementById('checkin-form').submit();
+                } else {
+                    alert('QR Code invalid: nu conține un cod unic valid.');
+                }
+            } catch (e) {
+                // Dacă nu e JSON, probabil e doar un text (codul simplu)
+                document.getElementById('id_cod_unic').value = decodedText;
+            }
+        }
+        function onScanFailure(error) {
+            // Eroare de scanare, ignorăm pentru ca scanează în continuu la FPS-ul setat
+        }
+        let html5QrcodeScanner = new Html5QrcodeScanner(
+            "qr-reader",
+            { fps: 10, qrbox: {width: 250, height: 250} },
+            /* verbose= */ false);
+        html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+    });
+</script>
+{% endblock %}

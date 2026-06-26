@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block title %}Rezervare Camera {{ camera.numar }} - UniStay{% endblock %}
+{% block content %}
+<section id="reservation-form" class="section">
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <a href="{% url 'room_detail' camera.pk %}" class="btn btn-outline-primary mb-4">
+                <i class="bi bi-arrow-left"></i> Înapoi la camera {{ camera.numar }}
+            </a>
+            <div class="uni-card">
+                <div class="uni-card-header py-4">
+                    <h4 class="mb-0 fw-bold">
+                        <i class="bi bi-calendar-plus me-2"></i> Rezervare - Camera {{ camera.numar }}
+                    </h4>
+                </div>
+                <div class="uni-card-body p-4">
+                    <div class="alert alert-info d-flex align-items-center">
+                        <i class="bi bi-info-circle-fill me-3" style="font-size: 1.5rem;"></i>
+                        <div>
+                            <strong>Camera {{ camera.numar }}</strong>
+                            {% if camera.cladire %} - {{ camera.cladire.nume }}{% endif %}
+                            | Etaj {{ camera.etaj }}
+                            | <strong>{{ camera.pret_lunar }} RON/lună</strong>
+                        </div>
+                    </div>
+                    <form method="post" enctype="multipart/form-data" class="uni-form">
+                        {% csrf_token %}
+                        {% if form.errors %}
+                        <div class="alert alert-danger">
+                            <i class="bi bi-exclamation-circle me-2"></i>
+                            {% for error in form.non_field_errors %}
+                                {{ error }}
+                            {% endfor %}
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    <p class="mb-0">{{ field.label }}: {{ error }}</p>
+                                {% endfor %}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="id_data_start" class="form-label fw-bold">
+                                    <i class="bi bi-calendar-event"></i> Data de început *
+                                </label>
+                                {{ form.data_start }}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="id_data_sfarsit" class="form-label fw-bold">
+                                    <i class="bi bi-calendar-event"></i> Data de sfârșit *
+                                </label>
+                                {{ form.data_sfarsit }}
+                            </div>
+                            <div class="col-12 mt-4">
+                                <label for="id_document_atasat" class="form-label fw-bold">
+                                    <i class="bi bi-file-earmark-text"></i> Document atașat (opțional, CI sau adeverință)
+                                </label>
+                                {{ form.document_atasat }}
+                            </div>
+                        </div>
+                        <hr class="my-4">
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="bi bi-check-circle"></i> Confirmă Rezervarea
+                            </button>
+                        </div>
+                        <p class="text-center mt-3 small" style="color: var(--text-secondary);">
+                            <i class="bi bi-info-circle"></i>
+                            După confirmare, vei fi redirecționat la pagina de plată.
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+{% endblock %}

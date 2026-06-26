@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+{% load cazare_tags %}
+{% block title %}Dashboard Student - UniStay{% endblock %}
+{% block content %}
+<section id="dashboard" class="section">
+  <div class="container section-title" data-aos="fade-up">
+    <span class="description-title">Dashboard</span>
+    <h2>Dashboard Student</h2>
+    <p>Bine ai venit!</p>
+  </div>
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+    <div class="text-end mb-4">
+      <a href="{% url 'room_list' %}" class="btn btn-primary btn-lg px-4">
+        <i class="bi bi-plus-circle"></i> Rezervare Nouă
+      </a>
+    </div>
+    {% if rezervare_activa %}
+    <div class="uni-card mb-5" style="border-left: 4px solid var(--accent-color);" data-aos="fade-up" data-aos-delay="200">
+      <div class="uni-card-body p-4">
+        <h5 class="fw-bold mb-4" style="color: var(--heading-color);">
+          <i class="bi bi-bookmark-star me-2" style="color: var(--accent-color);"></i> Rezervare Activă
+        </h5>
+        <div class="row align-items-center">
+          <div class="col-md-4 mb-3 mb-md-0">
+            <p class="mb-2"><strong><i class="bi bi-door-open me-2" style="color: var(--text-secondary);"></i>Camera:</strong> {{ rezervare_activa.camera }}</p>
+            <p class="mb-0">
+              <strong><i class="bi bi-calendar-range me-2" style="color: var(--text-secondary);"></i>Perioada:</strong>
+              {{ rezervare_activa.data_start|date:"d.m.Y" }} - {{ rezervare_activa.data_sfarsit|date:"d.m.Y" }}
+            </p>
+          </div>
+          <div class="col-md-4 mb-3 mb-md-0">
+            <p class="mb-2">
+              <strong><i class="bi bi-hash me-2" style="color: var(--text-secondary);"></i>Cod:</strong>
+              <code>{{ rezervare_activa.cod_unic }}</code>
+            </p>
+            <p class="mb-0">
+              <strong><i class="bi bi-info-circle me-2" style="color: var(--text-secondary);"></i>Status:</strong>
+              <span class="uni-badge uni-badge-{{ rezervare_activa.status }}">
+                {{ rezervare_activa.get_status_display }}
+              </span>
+            </p>
+          </div>
+          <div class="col-md-4 text-md-end">
+            <div class="d-flex justify-content-md-end gap-2">
+              {% if rezervare_activa.status == 'pending' %}
+              <a href="{% url 'payment' rezervare_activa.id %}" class="btn btn-success">
+                <i class="bi bi-credit-card"></i> Plătește
+              </a>
+              <form action="{% url 'reservation_cancel' rezervare_activa.id %}" method="POST" class="d-inline"
+                onsubmit="return confirm('Sigur vrei să anulezi rezervarea?');">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-danger">
+                  <i class="bi bi-x-circle"></i> Anulează
+                </button>
+              </form>
+              {% elif rezervare_activa.status == 'confirmed' %}
+              <a href="{% url 'checkin' %}" class="btn btn-primary">
+                <i class="bi bi-qr-code-scan"></i> Check-in
+              </a>
+              <form action="{% url 'reservation_cancel' rezervare_activa.id %}" method="POST" class="d-inline"
+                onsubmit="return confirm('Sigur vrei să anulezi rezervarea?');">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-danger">
+                  <i class="bi bi-x-circle"></i> Anulează
+                </button>
+              </form>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        {% if rezervare_activa.qr_code %}
+        <hr class="my-4">
+        <div class="text-center" data-aos="zoom-in" data-aos-delay="300">
+          <h6 class="fw-bold mb-3" style="color: var(--text-secondary);"><i class="bi bi-qr-code me-1"></i> Codul tău QR pentru acces:</h6>
+          <img src="{{ rezervare_activa.qr_code.url }}" alt="QR Code" class="img-thumbnail p-2"
+            style="max-width: 180px; border-radius: 12px; background: #fff;">
+        </div>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+    <div class="uni-card uni-card-static" data-aos="fade-up" data-aos-delay="400">
+      <div class="uni-card-header d-flex align-items-center">
+        <h5 class="mb-0 fw-bold">
+          <i class="bi bi-clock-history me-2" style="color: var(--accent-color);"></i> Istoric Rezervări
+        </h5>
+      </div>
+      <div class="p-0">
+        {% if rezervari %}
+        <div class="table-responsive">
+          <table class="table uni-table">
+            <thead>
+              <tr>
+                <th class="ps-4">Cod</th>
+                <th>Camera</th>
+                <th>Perioada</th>
+                <th>Status</th>
+                <th>Plată</th>
+                <th class="text-end pe-4">Acțiuni</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for rez in rezervari %}
+              <tr>
+                <td class="ps-4"><code>{{ rez.cod_unic }}</code></td>
+                <td><span class="fw-medium">{{ rez.camera }}</span></td>
+                <td style="color: var(--text-secondary);" class="small">
+                  {{ rez.data_start|date:"d.m.Y" }} - {{ rez.data_sfarsit|date:"d.m.Y" }}
+                </td>
+                <td>
+                  <span class="uni-badge uni-badge-{{ rez.status }}">
+                    {{ rez.get_status_display }}
+                  </span>
+                </td>
+                <td>
+                  {% if rez.plata %}
+                  <span class="{% if rez.plata.status == 'completed' %}fw-medium{% endif %}" style="color: {% if rez.plata.status == 'completed' %}var(--uni-success){% else %}var(--uni-warning){% endif %};">
+                    {{ rez.plata.suma }} RON
+                  </span>
+                  {% else %}
+                  <span class="small fst-italic" style="color: var(--text-tertiary);">Neplătit</span>
+                  {% endif %}
+                </td>
+                <td class="text-end pe-4">
+                  {% if rez.status == 'pending' %}
+                  <a href="{% url 'payment' rez.id %}"
+                    class="btn btn-sm btn-success rounded-pill px-3">Plătește</a>
+                  {% elif rez.qr_code %}
+                  <a href="{{ rez.qr_code.url }}" target="_blank"
+                    class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                    <i class="bi bi-qr-code"></i> Cod QR
+                  </a>
+                  {% if rez.plata and rez.plata.status == 'completed' %}
+                  <a href="{% url 'repeat_payment' rez.id %}"
+                    class="btn btn-sm btn-outline-success rounded-pill px-3 ms-1" title="Repetă plata">
+                    <i class="bi bi-arrow-repeat"></i> Repetă
+                  </a>
+                  {% endif %}
+                  {% else %}
+                  <span style="color: var(--text-tertiary);">-</span>
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <div class="uni-empty py-5">
+          <i class="bi bi-inbox"></i>
+          <h5>Nu ai nicio rezervare încă</h5>
+          <p class="mb-4">Găsește camera perfectă pentru tine și rezervă un loc.</p>
+          <a href="{% url 'room_list' %}" class="btn btn-primary px-4">
+            <i class="bi bi-search me-2"></i> Caută o cameră
+          </a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% block title %}Panou Admin - UniStay{% endblock %}
+{% block content %}
+<section class="section">
+<div class="container py-5">
+    <div class="mb-5" data-aos="fade-up">
+        <h2 class="page-heading">
+            <i class="bi bi-shield-lock"></i> Panou Administrare
+        </h2>
+        <p class="page-subtitle">
+            Gestionează căminul, camerele, rezervările și studenții
+        </p>
+    </div>
+    <div class="row g-4 mb-5" data-aos="fade-up" data-aos-delay="100">
+        <div class="col-md-3">
+            <div class="uni-stat">
+                <div class="stat-number">{{ total_camere }}</div>
+                <div class="stat-label">Camere totale</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="uni-stat success">
+                <div class="stat-number">{{ camere_disponibile }}</div>
+                <div class="stat-label">Disponibile</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="uni-stat warning">
+                <div class="stat-number">{{ total_rezervari }}</div>
+                <div class="stat-label">Rezervări</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="uni-stat accent">
+                <div class="stat-number">{{ total_studenti }}</div>
+                <div class="stat-label">Studenți</div>
+            </div>
+        </div>
+    </div>
+    <div class="row g-4 mb-5" data-aos="fade-up" data-aos-delay="200">
+        <div class="col-md-4">
+            <div class="uni-stat warning">
+                <div class="stat-number">{{ rezervari_pending }}</div>
+                <div class="stat-label">În așteptare</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="uni-stat success">
+                <div class="stat-number">{{ rezervari_confirmed }}</div>
+                <div class="stat-label">Confirmate</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="uni-stat info">
+                <div class="stat-number">{{ rezervari_checkedin }}</div>
+                <div class="stat-label">Check-in realizat</div>
+            </div>
+        </div>
+    </div>
+    <h4 class="fw-bold mb-3" style="color: var(--heading-color);" data-aos="fade-up" data-aos-delay="300">
+        <i class="bi bi-lightning" style="color: var(--accent-color);"></i> Acțiuni Rapide
+    </h4>
+    <div class="row g-4" data-aos="fade-up" data-aos-delay="400">
+        <div class="col-md-4">
+            <a href="{% url 'manage_rooms' %}" class="admin-action-card">
+                <div class="action-icon">
+                    <i class="bi bi-door-open"></i>
+                </div>
+                <h5>Gestionează Camere</h5>
+                <p>Adaugă, editează sau șterge camere</p>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="{% url 'manage_reservations' %}" class="admin-action-card">
+                <div class="action-icon">
+                    <i class="bi bi-calendar-check"></i>
+                </div>
+                <h5>Vizualizează Rezervări</h5>
+                <p>Vezi toate rezervările și statusul lor</p>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="{% url 'manage_students' %}" class="admin-action-card">
+                <div class="action-icon">
+                    <i class="bi bi-people"></i>
+                </div>
+                <h5>Gestionează Studenți</h5>
+                <p>Vizualizează toți studenții înregistrați</p>
+            </a>
+        </div>
+    </div>
+</div>
+</section>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block title %}Gestionare Studenți - UniStay{% endblock %}
+{% block content %}
+<section id="manage-students" class="section">
+<div class="container py-5">
+    <div class="mb-4" data-aos="fade-up">
+        <h2 class="page-heading">
+            <i class="bi bi-people"></i> Studenți Înregistrați
+        </h2>
+        <a href="{% url 'admin_dashboard' %}" class="page-back-link">
+            <i class="bi bi-arrow-left"></i> Înapoi la Dashboard
+        </a>
+    </div>
+    {% if studenti %}
+    <div class="uni-card uni-card-static" data-aos="fade-up" data-aos-delay="100">
+        <div class="p-0">
+            <div class="table-responsive">
+                <table class="table uni-table">
+                    <thead>
+                        <tr>
+                            <th>Nume complet</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Telefon</th>
+                            <th>Facultate</th>
+                            <th>An</th>
+                            <th>Status Cazare</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for profil in studenti %}
+                        <tr>
+                            <td>
+                                <strong>{{ profil.user.get_full_name|default:profil.user.username }}</strong>
+                            </td>
+                            <td>{{ profil.user.username }}</td>
+                            <td>{{ profil.user.email|default:"-" }}</td>
+                            <td>{{ profil.telefon|default:"-" }}</td>
+                            <td>{{ profil.facultate|default:"-" }}</td>
+                            <td>{{ profil.an_studiu|default:"-" }}</td>
+                            <td>
+                                <form action="{% url 'update_student_status' profil.id %}" method="POST" class="d-inline">
+                                    {% csrf_token %}
+                                    <select name="status_cazare" class="form-select form-select-sm" onchange="this.form.submit()" style="min-width: 130px; background-color: var(--surface-color); color: var(--text-color); border-color: var(--border-color);">
+                                        <option value="in_asteptare" {% if profil.status_cazare == 'in_asteptare' %}selected{% endif %}>În așteptare</option>
+                                        <option value="cazat" {% if profil.status_cazare == 'cazat' %}selected{% endif %}>Cazat</option>
+                                        <option value="decazat" {% if profil.status_cazare == 'decazat' %}selected{% endif %}>Decazat</option>
+                                    </select>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="uni-empty">
+        <i class="bi bi-inbox"></i>
+        <h4 class="mt-3">Nu există studenți înregistrați</h4>
+    </div>
+    {% endif %}
+</div>
+</section>
+{% endblock %}

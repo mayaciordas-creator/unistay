@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% block title %}Gestionare Rezervări - UniStay{% endblock %}
+{% block content %}
+<section id="manage-reservations" class="section">
+<div class="container py-5">
+    <div class="mb-4" data-aos="fade-up">
+        <h2 class="page-heading">
+            <i class="bi bi-calendar-check"></i> Gestionare Rezervări
+        </h2>
+        <a href="{% url 'admin_dashboard' %}" class="page-back-link">
+            <i class="bi bi-arrow-left"></i> Înapoi la Dashboard
+        </a>
+    </div>
+    <div class="uni-card uni-card-static mb-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="uni-card-body">
+            <form method="get" class="row g-3 align-items-end uni-form">
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Filtrare după status</label>
+                    <select name="status" class="form-select">
+                        <option value="">Toate</option>
+                        <option value="pending" {% if status_selectat == 'pending' %}selected{% endif %}>
+                            În așteptare
+                        </option>
+                        <option value="confirmed" {% if status_selectat == 'confirmed' %}selected{% endif %}>
+                            Confirmate
+                        </option>
+                        <option value="checked_in" {% if status_selectat == 'checked_in' %}selected{% endif %}>
+                            Check-in realizat
+                        </option>
+                        <option value="cancelled" {% if status_selectat == 'cancelled' %}selected{% endif %}>
+                            Anulate
+                        </option>
+                        <option value="rejected" {% if status_selectat == 'rejected' %}selected{% endif %}>
+                            Respinse
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-funnel"></i> Filtrează
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% if rezervari %}
+    <div class="uni-card uni-card-static" data-aos="fade-up" data-aos-delay="200">
+        <div class="p-0">
+            <div class="table-responsive">
+                <table class="table uni-table">
+                    <thead>
+                        <tr>
+                            <th>Cod</th>
+                            <th>Student</th>
+                            <th>Camera</th>
+                            <th>Perioada</th>
+                            <th>Status</th>
+                            <th>Dată creare</th>
+                            <th>Document</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for rez in rezervari %}
+                        <tr>
+                            <td><code>{{ rez.cod_unic }}</code></td>
+                            <td>
+                                <strong>{{ rez.student.get_full_name|default:rez.student.username }}</strong>
+                            </td>
+                            <td>{{ rez.camera }}</td>
+                            <td>
+                                {{ rez.data_start|date:"d.m.Y" }} - 
+                                {{ rez.data_sfarsit|date:"d.m.Y" }}
+                            </td>
+                            <td>
+                                <form action="{% url 'update_reservation_status' rez.pk %}" method="POST" class="d-inline">
+                                    {% csrf_token %}
+                                    <select name="status" class="form-select form-select-sm" onchange="this.form.submit()" style="min-width: 140px; background-color: var(--surface-color); color: var(--text-color); border-color: var(--border-color);">
+                                        <option value="pending" {% if rez.status == 'pending' %}selected{% endif %}>În așteptare</option>
+                                        <option value="confirmed" {% if rez.status == 'confirmed' %}selected{% endif %}>Confirmată</option>
+                                        <option value="checked_in" {% if rez.status == 'checked_in' %}selected{% endif %}>Check-in</option>
+                                        <option value="cancelled" {% if rez.status == 'cancelled' %}selected{% endif %}>Anulată</option>
+                                        <option value="rejected" {% if rez.status == 'rejected' %}selected{% endif %}>Respinsă</option>
+                                    </select>
+                                </form>
+                            </td>
+                            <td>{{ rez.data_creare|date:"d.m.Y H:i" }}</td>
+                            <td>
+                                {% if rez.document_atasat %}
+                                <a href="{{ rez.document_atasat.url }}" target="_blank" class="btn btn-sm btn-outline-info">
+                                    <i class="bi bi-file-earmark-text"></i> Vezi
+                                </a>
+                                {% else %}
+                                <span class="text-muted small">-</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="uni-empty">
+        <i class="bi bi-inbox"></i>
+        <h4 class="mt-3">Nu există rezervări</h4>
+    </div>
+    {% endif %}
+</div>
+</section>
+{% endblock %}

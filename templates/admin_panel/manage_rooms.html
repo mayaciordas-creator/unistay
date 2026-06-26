@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block title %}Gestionare Camere - UniStay{% endblock %}
+{% block content %}
+<section id="manage-rooms" class="section">
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4" data-aos="fade-up">
+        <div>
+            <h2 class="page-heading">
+                <i class="bi bi-door-open"></i> Gestionare Camere
+            </h2>
+            <a href="{% url 'admin_dashboard' %}" class="page-back-link">
+                <i class="bi bi-arrow-left"></i> Înapoi la Dashboard
+            </a>
+        </div>
+        <a href="{% url 'add_room' %}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Adaugă Cameră
+        </a>
+    </div>
+    {% if camera_de_sters %}
+    <div class="alert alert-danger" data-aos="fade-up">
+        <h6 class="fw-bold">
+            <i class="bi bi-exclamation-triangle"></i> Confirmare Ștergere
+        </h6>
+        <p>Sigur vrei să ștergi camera <strong>{{ camera_de_sters }}</strong>?</p>
+        <form method="post" action="{% url 'delete_room' camera_de_sters.pk %}" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger btn-sm">
+                <i class="bi bi-trash"></i> Da, Șterge
+            </button>
+            <a href="{% url 'manage_rooms' %}" class="btn btn-outline-secondary btn-sm">Anulează</a>
+        </form>
+    </div>
+    {% endif %}
+    {% if camere %}
+    <div class="uni-card uni-card-static" data-aos="fade-up" data-aos-delay="100">
+        <div class="p-0">
+            <div class="table-responsive">
+                <table class="table uni-table">
+                    <thead>
+                        <tr>
+                            <th>Număr</th>
+                            <th>Clădire</th>
+                            <th>Etaj</th>
+                            <th>Locuri</th>
+                            <th>Disponibile</th>
+                            <th>Preț/lună</th>
+                            <th>Acțiuni</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for camera in camere %}
+                        <tr>
+                            <td><strong>{{ camera.numar }}</strong></td>
+                            <td>{{ camera.cladire|default:"-" }}</td>
+                            <td>{{ camera.etaj }}</td>
+                            <td>{{ camera.numar_locuri }}</td>
+                            <td>
+                                <span class="fw-bold" style="color: {% if camera.este_disponibila %}var(--uni-success){% else %}var(--uni-danger){% endif %};">
+                                    {{ camera.locuri_disponibile }}
+                                </span>
+                            </td>
+                            <td>{{ camera.pret_lunar }} RON</td>
+                            <td>
+                                <a href="{% url 'edit_room' camera.pk %}" 
+                                   class="btn btn-sm btn-outline-primary me-1">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a href="{% url 'delete_room' camera.pk %}" 
+                                   class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="uni-empty">
+        <i class="bi bi-inbox"></i>
+        <h4 class="mt-3">Nu există camere încă</h4>
+        <a href="{% url 'add_room' %}" class="btn btn-primary mt-2">
+            <i class="bi bi-plus-circle"></i> Adaugă prima cameră
+        </a>
+    </div>
+    {% endif %}
+</div>
+</section>
+{% endblock %}

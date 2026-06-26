@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% block title %}Detalii Camera {{ camera.numar }} - UniStay{% endblock %}
+{% block content %}
+<section id="room-details" class="section" style="padding-top: 40px;">
+  <div class="container section-title pb-3" data-aos="fade-up">
+    <span class="description-title">Cameră</span>
+    <h2>Detalii Camera {{ camera.numar }}</h2>
+    <p>Informații complete și opțiuni de rezervare pentru această cameră.</p>
+  </div>
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+    <div class="row gy-4">
+      <div class="col-lg-8">
+        <div class="uni-card h-100">
+          <div class="uni-card-header py-4 text-center">
+             <i class="bi bi-door-open" style="font-size: 5rem; color: var(--text-tertiary);"></i>
+             <h3 class="mt-3 fw-bold mb-0">Camera {{ camera.numar }}</h3>
+          </div>
+          <div class="uni-card-body p-5">
+            <h4 class="fw-bold mb-4" style="color: var(--heading-color);">Configurație Cameră</h4>
+            <div class="row mt-4 g-4">
+              <div class="col-sm-4">
+                <div class="detail-box">
+                  <i class="bi bi-people-fill"></i>
+                  <div>
+                    <div class="detail-label">Capacitate</div>
+                    <div class="detail-value">{{ camera.numar_locuri }} pers.</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="detail-box">
+                  <i class="bi bi-gender-ambiguous"></i>
+                  <div>
+                    <div class="detail-label">Gen</div>
+                    <div class="detail-value">{{ camera.get_gen_camera_display }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="detail-box">
+                  <i class="bi bi-droplet-fill"></i>
+                  <div>
+                    <div class="detail-label">Baie</div>
+                    <div class="detail-value">{{ camera.get_tip_baie_display }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="uni-card mb-4" data-aos="fade-up" data-aos-delay="200">
+          <div class="uni-card-body p-4">
+            <h4 class="fw-bold pb-3 mb-4" style="color: var(--heading-color); border-bottom: 1px solid var(--border-color);">Informații Cameră</h4>
+            <ul class="info-list">
+              <li>
+                <span class="info-label"><i class="bi bi-building"></i> Clădire</span>
+                <span class="info-value">{{ camera.cladire.nume|default:'N/A' }}</span>
+              </li>
+              <li>
+                <span class="info-label"><i class="bi bi-envelope-check"></i> Status</span>
+                {% if camera.este_disponibila %}
+                  <span class="badge bg-success-subtle text-success px-2 py-1">Disponibilă</span>
+                {% else %}
+                  <span class="badge bg-danger-subtle text-danger px-2 py-1">Ocupată complet</span>
+                {% endif %}
+              </li>
+              <li>
+                <span class="info-label"><i class="bi bi-person-check"></i> Locuri Libere</span>
+                <span class="info-value">{{ camera.locuri_disponibile }}</span>
+              </li>
+              <li>
+                <span class="info-label"><i class="bi bi-cash"></i> Preț lunar</span>
+                <span class="info-value fs-4" style="color: var(--accent-color);">{{ camera.pret_lunar }} <small class="fs-6" style="color: var(--text-secondary);">RON</small></span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="uni-card text-center" data-aos="fade-up" data-aos-delay="300" style="border-color: var(--accent-color);">
+          <div class="uni-card-body p-4" style="background: linear-gradient(135deg, rgba(0, 136, 112, 0.15), rgba(0, 136, 112, 0.05));">
+            <h5 class="fw-bold mb-3" style="color: var(--heading-color);">Vrei această cameră?</h5>
+            <p class="small mb-4" style="color: var(--text-secondary);">Rezervă acum pentru a-ți asigura locul pe perioada următoare, direct din platformă.</p>
+            {% if camera.este_disponibila %}
+              {% if user.is_authenticated %}
+                  {% if user.profil.este_student %}
+                      <a href="{% url 'reservation_create' camera.pk %}" class="btn btn-success btn-lg w-100 fw-bold rounded-pill">
+                          <i class="bi bi-bookmark-check me-2"></i> Rezervă Locul
+                      </a>
+                  {% else %}
+                      <div class="alert alert-warning text-start small mb-0">
+                          <i class="bi bi-info-circle me-1"></i> Doar studenții pot face rezervări.
+                      </div>
+                  {% endif %}
+              {% else %}
+                  <a href="{% url 'login' %}?next={% url 'reservation_create' camera.pk %}" class="btn btn-outline-primary btn-lg w-100 fw-bold rounded-pill">
+                      Autentifică-te pentru rezervare
+                  </a>
+              {% endif %}
+            {% else %}
+              <button class="btn btn-outline-secondary btn-lg w-100 rounded-pill" disabled>
+                  <i class="bi bi-x-circle me-2"></i> Indisponibilă
+              </button>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

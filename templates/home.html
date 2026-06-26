@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+{% block title %}UniStay{% endblock %}
+{% block content %}
+{% if user.is_authenticated and request.user.profil.este_admin %}
+<section id="admin-home" class="section" style="min-height: 70vh; display: flex; align-items: center; padding-top: 80px;">
+  <div class="container text-center" data-aos="fade-up">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <h1 class="fw-bold mb-4" style="color: var(--heading-color);">
+          Bine ai revenit, Administrator {{ user.first_name|default:user.username }}!
+        </h1>
+        <p class="fs-4 mb-5" style="color: var(--text-secondary);">
+          Ești conectat cu un cont de administratare. Utilizează panoul de mai jos pentru a gestiona locurile de cazare.
+        </p>
+        <div class="d-flex justify-content-center gap-3">
+          <a href="{% url 'admin_dashboard' %}" class="btn btn-primary btn-lg px-4 py-3 rounded-pill">
+            <i class="bi bi-speedometer2 me-2"></i> Accesează Panoul Admin
+          </a>
+          <a href="{% url 'manage_reservations' %}" class="btn btn-outline-light btn-lg px-4 py-3 rounded-pill" style="border-color: var(--border-color); color: var(--text-color);">
+            <i class="bi bi-calendar-check me-2"></i> Gestionare Rezervări
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% else %}
+<section id="hero" class="hero section">
+  <div class="hero-background">
+    <div class="hero-overlay"></div>
+  </div>
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+    <div class="row justify-content-center text-center">
+      <div class="col-lg-10">
+        <div class="hero-content" data-aos="fade-up" data-aos-delay="200">
+          <h1>UniStay<br>Cazare Camin</h1>
+          <p>rezerva o camera acum!</p>
+          <div class="hero-btns" data-aos="fade-up" data-aos-delay="300">
+            <a href="{% url 'room_list' %}" class="btn btn-primary">
+              <i class="bi bi-search"></i> Vezi Camerele
+            </a>
+            {% if not user.is_authenticated %}
+            <a href="{% url 'register' %}" class="btn btn-outline">
+              <i class="bi bi-person-plus"></i> Creează Cont
+            </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row justify-content-center mt-5">
+      <div class="col-lg-10">
+        <div class="hero-stats" data-aos="fade-up" data-aos-delay="500">
+          <div class="stat-item">
+            <div class="stat-icon"><i class="bi bi-door-closed"></i></div>
+            <h3><span data-purecounter-start="0" data-purecounter-end="{{ total_camere }}" data-purecounter-duration="1"
+                class="purecounter"></span></h3>
+            <p>Camere Totale</p>
+          </div>
+          <div class="stat-item">
+            <div class="stat-icon"><i class="bi bi-check-circle"></i></div>
+            <h3><span data-purecounter-start="0" data-purecounter-end="{{ camere_disponibile }}"
+                data-purecounter-duration="1" class="purecounter"></span></h3>
+            <p>Camere Disponibile</p>
+          </div>
+          <div class="stat-item">
+            <div class="stat-icon"><i class="bi bi-building"></i></div>
+            <h3><span data-purecounter-start="0" data-purecounter-end="{{ total_cladiri }}"
+                data-purecounter-duration="1" class="purecounter"></span></h3>
+            <p>Clădiri</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="steps" class="steps section">
+  <div class="container section-title" data-aos="fade-up">
+    <span class="description-title">Proces</span>
+    <h2>Cum Funcționează?</h2>
+    <p>Procesul de cazare în 4 pași simpli</p>
+  </div>
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+    <div class="steps-5">
+      <div class="process-container">
+        <div class="process-item" data-aos="fade-up" data-aos-delay="200">
+          <div class="content">
+            <span class="step-number">01</span>
+            <div class="card-body">
+              <div class="step-icon"><i class="bi bi-search"></i></div>
+              <div class="step-content">
+                <h3>Caută Camera</h3>
+                <p>Explorează camerele disponibile</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="process-item" data-aos="fade-up" data-aos-delay="300">
+          <div class="content">
+            <span class="step-number">02</span>
+            <div class="card-body">
+              <div class="step-icon"><i class="bi bi-calendar-check"></i></div>
+              <div class="step-content">
+                <h3>Asigură-ți locul</h3>
+                <p>Completează formularul de cazare.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="process-item" data-aos="fade-up" data-aos-delay="400">
+          <div class="content">
+            <span class="step-number">03</span>
+            <div class="card-body">
+              <div class="step-icon"><i class="bi bi-credit-card"></i></div>
+              <div class="step-content">
+                <h3>Plătește Online</h3>
+                <p>Finalizează plata securizată și primește confirmarea instant.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="process-item" data-aos="fade-up" data-aos-delay="500">
+          <div class="content">
+            <span class="step-number">04</span>
+            <div class="card-body">
+              <div class="step-icon"><i class="bi bi-qr-code"></i></div>
+              <div class="step-content">
+                <h3>Check-in QR</h3>
+                <p>Folosește codul QR unic pentru check-in rapid la cămin.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="services section light-background">
+  <div class="container" data-aos="fade-up">
+    <div class="cta-wrapper mt-5 text-center" data-aos="fade-up" data-aos-delay="100">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="cta-box">
+            <div class="row align-items-center">
+              <div class="col-lg-12">
+                <div class="cta-content text-center" data-aos="fade-left" data-aos-delay="300">
+                  <h3>Pregătit să îți rezervi camera?</h3>
+                  <p>Începe acum procesul de cazare, simplu și rapid!</p>
+                  <a href="{% url 'room_list' %}" class="primary-btn mt-3">
+                    <i class="bi bi-arrow-right-circle"></i> Începe Acum
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+{% endblock %}

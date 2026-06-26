@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% block title %}Plată Rezervare - UniStay{% endblock %}
+{% block content %}
+<section id="payment" class="section">
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="uni-card">
+                <div class="uni-card-header py-4">
+                    <h4 class="mb-0 fw-bold">
+                        <i class="bi bi-credit-card me-2"></i> Plată Rezervare
+                    </h4>
+                </div>
+                <div class="uni-card-body p-4">
+                    <div class="uni-card uni-card-static mb-4">
+                        <div class="uni-card-body">
+                            <h6 class="fw-bold mb-3">
+                                <i class="bi bi-receipt me-2"></i> Rezumat Rezervare
+                            </h6>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p class="mb-1">
+                                        <strong>Camera:</strong> {{ rezervare.camera }}
+                                    </p>
+                                    <p class="mb-1">
+                                        <strong>Perioada:</strong> 
+                                        {{ rezervare.data_start|date:"d.m.Y" }} - 
+                                        {{ rezervare.data_sfarsit|date:"d.m.Y" }}
+                                    </p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="mb-1">
+                                        <strong>Cod rezervare:</strong> 
+                                        <code>{{ rezervare.cod_unic }}</code>
+                                    </p>
+                                    <p class="mb-1">
+                                        <strong>Status:</strong> 
+                                        <span class="status-badge status-{{ rezervare.status }}">
+                                            {{ rezervare.get_status_display }}
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center my-4">
+                        <p class="mb-1" style="color: var(--text-secondary);">Total de plată:</p>
+                        <div class="price-display">
+                            {{ suma|floatformat:2 }} <span class="price-unit">RON</span>
+                        </div>
+                    </div>
+                    <hr>
+                    {% if use_stripe %}
+                    <div class="alert alert-info">
+                        <i class="bi bi-shield-lock me-2"></i>
+                        <strong>Plată securizată prin Stripe.</strong> 
+                        Vei fi redirecționat către pagina de plată Stripe.
+                    </div>
+                    {% if stripe_error %}
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        <strong>Eroare Stripe:</strong> {{ stripe_error }}
+                        <br><small>Se folosește modul simulare ca alternativă.</small>
+                    </div>
+                    {% endif %}
+                    <div class="d-grid">
+                        <button type="button" id="stripe-checkout-btn" class="btn btn-success btn-lg">
+                            <i class="bi bi-lock-fill"></i> Plătește {{ suma|floatformat:2 }} RON cu Stripe
+                        </button>
+                    </div>
+                    {% else %}
+                    <form method="post" action="{% url 'process_payment' rezervare.id %}" class="uni-form">
+                        {% csrf_token %}
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle me-2"></i>
+                            <strong>Mod simulare:</strong> Apasă butonul de mai jos pentru a simula 
+                            o plată reușită. Pentru plăți reale, configurează cheile Stripe 
+                            în settings.py.
+                        </div>
+                        <div class="uni-card uni-card-static mb-4">
+                            <div class="uni-card-body">
+                                <h6 class="fw-bold mb-3">
+                                    <i class="bi bi-credit-card-2-front me-2"></i> Date Card (simulare)
+                                </h6>
+                                <div class="row g-3">
+                                    <div class="col-12">
+                                        <label class="form-label">Număr card</label>
+                                        <input type="text" class="form-control" 
+                                               value="4242 4242 4242 4242" readonly>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Dată expirare</label>
+                                        <input type="text" class="form-control" 
+                                               value="12/28" readonly>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">CVC</label>
+                                        <input type="text" class="form-control" 
+                                               value="123" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="bi bi-lock-fill"></i> Plătește {{ suma|floatformat:2 }} RON
+                            </button>
+                        </div>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+{% endblock %}
+{% block extra_js %}
+{% if use_stripe and stripe_session_id %}
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    var stripe = Stripe('{{ stripe_public_key }}');
+    document.getElementById('stripe-checkout-btn').addEventListener('click', function() {
+        stripe.redirectToCheckout({
+            sessionId: '{{ stripe_session_id }}'
+        }).then(function(result) {
+            if (result.error) {
+                alert(result.error.message);
+            }
+        });
+    });
+</script>
+{% endif %}
+{% endblock %}
